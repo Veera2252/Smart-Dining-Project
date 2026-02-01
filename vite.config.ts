@@ -5,9 +5,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   define: {
-    // Bridges the environment variables for client-side usage
-    // Note: The prompt requires using process.env.API_KEY directly
-    'process.env': process.env
+    // Specifically define process.env.API_KEY for the Gemini SDK
+    'process.env.API_KEY': JSON.stringify(process.env.API_KEY)
   },
   server: {
     host: '0.0.0.0',
