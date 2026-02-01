@@ -1,15 +1,26 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { MenuItem, CustomizationOptions, AiAnalysisResult } from "../types";
-
-// Initialize properly according to guidelines. 
-// Assume API_KEY is pre-configured and valid.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const analyzeOrderRisk = async (
   item: MenuItem,
   customization: CustomizationOptions
 ): Promise<AiAnalysisResult> => {
-  // Construct a prompt that asks Gemini to act as a Head Chef/Safety Officer
+  // Always initialize with the current process.env.API_KEY
+  const apiKey = process.env.API_KEY;
+
+  if (!apiKey) {
+    console.error("Gemini API Key is missing. Please set API_KEY environment variable.");
+    return {
+      safe: true,
+      message: "Safety verification skipped (API Key missing). Your notes are saved.",
+      kitchenTicketSummary: `NOTES: ${customization.allergyNotes} ${customization.specialRequests}`
+    };
+  }
+
+  // Fix: Initializing GoogleGenAI client using the named parameter apiKey from process.env.API_KEY directly
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
   const prompt = `
     You are an expert Head Chef and Food Safety Officer.
     Review the following order for potential conflicts between the Menu Item and the Customer's Customizations (especially allergies and dietary restrictions).
@@ -32,6 +43,7 @@ export const analyzeOrderRisk = async (
   `;
 
   try {
+    // Fix: Using gemini-3-flash-preview for a basic text reasoning task as per model selection rules
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: prompt,
@@ -49,6 +61,7 @@ export const analyzeOrderRisk = async (
       }
     });
 
+    // Fix: Extracting generated text using the .text property directly, following the correct extraction method
     const resultText = response.text;
     if (!resultText) throw new Error("Empty response from AI");
     
@@ -56,7 +69,6 @@ export const analyzeOrderRisk = async (
 
   } catch (error) {
     console.error("Gemini Analysis Failed:", error);
-    // Fallback in case of error
     return {
       safe: true,
       message: "Could not verify with AI, but your notes have been saved.",

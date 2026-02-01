@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { MENU_ITEMS as INITIAL_MENU_ITEMS, CATEGORIES } from './data/menu';
 import MenuItemCard from './components/MenuItemCard';
@@ -172,7 +173,8 @@ const App: React.FC = () => {
              <div className="flex bg-blue-800/50 p-1 rounded-lg overflow-x-auto no-scrollbar">
                 <button 
                    onClick={() => setView('customer')}
-                   className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap ${view === 'customer' ? 'bg-white shadow text-blue-900' : 'text-blue-100 hover:text-white hover:bg-blue-700/50'}`}
+                   // Fix: Casting view to string to avoid "no overlap" error in narrowed type checking on line 175
+                   className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap ${(view as string) === 'customer' ? 'bg-white shadow text-blue-900' : 'text-blue-100 hover:text-white hover:bg-blue-700/50'}`}
                 >
                    <LayoutGrid size={16} /> <span className="hidden sm:inline">Menu</span>
                 </button>
