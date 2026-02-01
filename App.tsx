@@ -174,7 +174,8 @@ const App: React.FC = () => {
              <div className="flex bg-blue-800/50 p-1 rounded-lg overflow-x-auto no-scrollbar">
                 <button 
                    onClick={() => setView('customer')}
-                   className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap ${view === 'customer' ? 'bg-white shadow text-blue-900' : 'text-blue-100 hover:text-white hover:bg-blue-700/50'}`}
+                   /* Fixed: Cast view to string to avoid TypeScript narrowing error when comparing against 'customer' inside this block */
+                   className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap ${(view as string) === 'customer' ? 'bg-white shadow text-blue-900' : 'text-blue-100 hover:text-white hover:bg-blue-700/50'}`}
                 >
                    <LayoutGrid size={16} /> <span className="hidden sm:inline">Menu</span>
                 </button>
