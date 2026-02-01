@@ -1,0 +1,7 @@
+{
+  "name": "DineRight - Custom Dining",
+  "description": "A smart menu application bridging the gap between customers and the kitchen with structured dietary customizations and AI-powered order verification.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
